@@ -109,7 +109,7 @@ int main()
 		processInput(window);
 		
 		glClear(GL_COLOR_BUFFER_BIT);
-		program1.use();
+		program1.set4f("ourColor", 1.0f,sin(glfwGetTime())/2 + 0.5f, 1.0f, 1.0f);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		program2.use();

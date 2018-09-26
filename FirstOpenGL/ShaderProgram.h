@@ -12,6 +12,7 @@ private:
 public:
 	ShaderProgram(const char* vertexPath, const char* fragmentPath);
 	void use();
+	void set4f(const std::string &name, float f1, float f2, float f3, float f4);
 	~ShaderProgram();
 };
 

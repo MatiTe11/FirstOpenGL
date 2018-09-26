@@ -28,6 +28,12 @@ void ShaderProgram::use()
 	glUseProgram(ID);
 }
 
+void ShaderProgram::set4f(const std::string &name, float f1, float f2, float f3, float f4)
+{
+	use();
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), f1,f2,f3,f4);
+}
+
 
 ShaderProgram::~ShaderProgram()
 {
