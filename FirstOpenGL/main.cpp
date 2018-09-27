@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "ShaderProgram.h"
+#include "stb_image.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -19,17 +20,17 @@ int main()
 {
 
 	float vertices[] = {
-		0.5f,  0.5f, 0.0f,  // top right
-		0.5f, -0.5f, 0.0f,  // bottom right
-		0.1f, -0.9f, 0.0f,  // bottom left
-		0.1f,  0.9f, 0.0f   // top left 
+		0.9f,  0.5f, 0.0f,  1.0f, 1.0f,  // top right
+		0.9f, -0.5f, 0.0f,  1.0f, 0.0f,  // bottom right
+		0.1f, -0.5f, 0.0f,  0.0f, 0.0f,  // bottom left
+		0.1f,  0.5f, 0.0f,  0.0f, 1.0f   // top left 
 	};
 
 	float vertices2[] = {
-		-0.5f,  0.5f, 0.0f,  // top right
-		-0.5f, -0.5f, 0.0f,  // bottom right
-		-0.1f, -0.9f, 0.0f,  // bottom left
-		-0.1f,  0.9f, 0.0f   // top left 
+		-0.9f,  0.5f, 0.0f,  // top right
+		-0.9f, -0.5f, 0.0f,  // bottom right
+		-0.1f, -0.5f, 0.0f,  // bottom left
+		-0.1f,  0.5f, 0.0f   // top left 
 	};
 
 	unsigned int indices[] = {  // note that we start from 0!
@@ -77,7 +78,7 @@ int main()
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	unsigned int EBO;
@@ -104,15 +105,54 @@ int main()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
+	//texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	program2.setSampler2d("ourTexture", 0);
+	stbi_image_free(data);
+	///tex2
+	unsigned int texture2;
+	glGenTextures(1, &texture2);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
+	program2.setSampler2d("ourTexture2", 1);
+
+
+	///attrib for first set of verticies
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 		
 		glClear(GL_COLOR_BUFFER_BIT);
-		program1.set4f("ourColor", 1.0f,sin(glfwGetTime())/2 + 0.5f, 1.0f, 1.0f);
+		program2.set1f("alpha", sin(glfwGetTime()));
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		program2.use();
+		program1.set4f("ourColor", 1.0f, sin(glfwGetTime()) / 2 + 0.5f, 1.0f, 1.0f);
 		glBindVertexArray(VAO2);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

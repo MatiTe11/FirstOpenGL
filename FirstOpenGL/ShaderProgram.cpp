@@ -34,6 +34,23 @@ void ShaderProgram::set4f(const std::string &name, float f1, float f2, float f3,
 	glUniform4f(glGetUniformLocation(ID, name.c_str()), f1,f2,f3,f4);
 }
 
+void ShaderProgram::set1f(const std::string &name, float f)
+{
+	use();
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), f);
+}
+
+void ShaderProgram::setSampler2d(const std::string & texName, int texUnit)
+{
+	use();
+	glUniform1i(glGetUniformLocation(ID, texName.c_str()), texUnit);
+}
+
+int ShaderProgram::getID()
+{
+	return ID;
+}
+
 
 ShaderProgram::~ShaderProgram()
 {
