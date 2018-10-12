@@ -3,6 +3,12 @@
 #include <iostream>
 #include "ShaderProgram.h"
 #include "stb_image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "Cube.h"
+
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -18,6 +24,8 @@ void processInput(GLFWwindow *window)
 
 int main()
 {
+	float screenWidth = 800;
+	float screenHeight = 600;
 
 	float vertices[] = {
 		0.9f,  0.5f, 0.0f,  1.0f, 1.0f,  // top right
@@ -37,13 +45,18 @@ int main()
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
+ 
+	glm::mat4 trans;
+	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+	
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -144,17 +157,37 @@ int main()
 	glEnableVertexAttribArray(1);
 
 
+	//matricies
+	glm::mat4 view;
+	// note that we're translating the scene in the reverse direction of where we want to move
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), (screenWidth / screenHeight), 0.1f, 100.0f);
+
+	//Cube
+	Cube myCube(&program2);
+
+	glEnable(GL_DEPTH_TEST);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		
-		glClear(GL_COLOR_BUFFER_BIT);
-		program2.set1f("alpha", sin(glfwGetTime()));
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		/*program2.set1f("alpha", sin(glfwGetTime()));
+		program2.setMatrix4f("transform", glm::value_ptr(trans));
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		program1.set4f("ourColor", 1.0f, sin(glfwGetTime()) / 2 + 0.5f, 1.0f, 1.0f);
+		program1.setMatrix4f("transform", glm::value_ptr(trans));
+
 		glBindVertexArray(VAO2);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
+		program2.setMatrix4f("model", glm::value_ptr(*myCube.getModel()));
+		program2.setMatrix4f("view", glm::value_ptr(view));
+		program2.setMatrix4f("projection", glm::value_ptr(projection));
+		myCube.draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

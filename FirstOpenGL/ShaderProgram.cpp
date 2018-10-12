@@ -40,6 +40,11 @@ void ShaderProgram::set1f(const std::string &name, float f)
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), f);
 }
 
+void ShaderProgram::setMatrix4f(const std::string & name, float * value)
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
+}
+
 void ShaderProgram::setSampler2d(const std::string & texName, int texUnit)
 {
 	use();
