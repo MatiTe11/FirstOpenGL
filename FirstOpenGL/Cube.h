@@ -22,6 +22,7 @@ public:
 	Cube(ShaderProgram* shader);
 	void draw();
 	glm::mat4* getModel();
+	void rotate(float deegres);
 	~Cube();
 
 	

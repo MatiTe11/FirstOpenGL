@@ -40,7 +40,18 @@ Cube::Cube(ShaderProgram* shader)
 		initialize();
 
 	cubeShader = shader;
-	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//glm::mat4 m1 = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//glm::mat4 m2 = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//model = m1 * m2 * model;
+	/*model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));*/
+	glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
+	model = glm::rotate(model, glm::radians(45.0f), vector);
+	vector = (glm::inverse(model) * glm::vec4(0, 0, 1, 0));
+	model = glm::rotate(model, glm::radians(45.0f), vector);
+	//vector = (glm::inverse(model) * glm::vec4(0, 1, 0, 0));
+	//model = glm::rotate(model, glm::radians(360.0f), vector);
+
 }
 
 void Cube::draw()
@@ -53,6 +64,11 @@ void Cube::draw()
 glm::mat4* Cube::getModel()
 {
 	return &model;
+}
+
+void Cube::rotate(float deegres)
+{
+	model = glm::rotate(model, glm::radians(deegres), glm::vec3(0.0f, 1.0f, 0.0f));	
 }
 
 

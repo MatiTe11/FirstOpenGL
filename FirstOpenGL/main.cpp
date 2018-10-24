@@ -7,27 +7,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Cube.h"
+#include "InputManager.h"
 
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
 
 
 int main()
 {
+	
+
 	float screenWidth = 800;
 	float screenHeight = 600;
 
-	
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -50,8 +40,7 @@ int main()
 
 	glViewport(0, 0, screenWidth, screenHeight);
 
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
+	InputManager inputManager(window);
 
 	ShaderProgram program1("vertexShader.txt", "fragmentShader1.txt");
 	ShaderProgram program2("vertexShader.txt", "fragmentShader2.txt");
@@ -108,10 +97,17 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		processInput(window);
-		
+		inputManager.update();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+		//view = glm::rotate(view, glm::radians(0.01f), glm::vec3(0.0f, 1.0f, 0.0f));
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			view = glm::rotate(view, glm::radians(0.05f), glm::vec3(0.0f, 1.0f, 0.0f));
+		else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			view = glm::rotate(view, glm::radians(-0.05f), glm::vec3(0.0f, 1.0f, 0.0f));
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			view = glm::rotate(view, glm::radians(0.05f), glm::vec3(1.0f, 0.0f, 0.0f));
+		else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+			view = glm::rotate(view, glm::radians(-0.05f), glm::vec3(1.0f, 0.0f, 0.0f));
 		program2.setMatrix4f("model", glm::value_ptr(*myCube.getModel()));
 		program2.setMatrix4f("view", glm::value_ptr(view));
 		program2.setMatrix4f("projection", glm::value_ptr(projection));
