@@ -7,7 +7,7 @@
 class Cube
 {
 private:
-	static const float vertices[];
+	static  float vertices[];
 	static unsigned int indices[];
 	static unsigned int VAO;
 	static unsigned int VBO;

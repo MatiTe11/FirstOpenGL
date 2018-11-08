@@ -1,6 +1,6 @@
 #include "Cube.h"
 
-const float Cube::vertices[] = {
+ float Cube::vertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
 	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -36,22 +36,24 @@ ShaderProgram* Cube::cubeShader = nullptr;
 
 Cube::Cube(ShaderProgram* shader)
 {
+	int scale = 100;
+	for (int i = 0; i < 8; i++)
+	{
+		vertices[5*i] *= scale;
+		vertices[5*i + 1] *= scale;
+		vertices[5*i + 2] *= scale;
+
+	}
+
 	if (!initialized)
 		initialize();
 
 	cubeShader = shader;
-	//glm::mat4 m1 = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	//glm::mat4 m2 = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//model = m1 * m2 * model;
-	/*model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));*/
-	glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
-	model = glm::rotate(model, glm::radians(45.0f), vector);
-	vector = (glm::inverse(model) * glm::vec4(0, 0, 1, 0));
-	model = glm::rotate(model, glm::radians(45.0f), vector);
-	//vector = (glm::inverse(model) * glm::vec4(0, 1, 0, 0));
-	//model = glm::rotate(model, glm::radians(360.0f), vector);
 
+	glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
+	//model = glm::rotate(model, glm::radians(45.0f), vector);
+	vector = (glm::inverse(model) * glm::vec4(0, 0, 1, 0));
+	//model = glm::rotate(model, glm::radians(45.0f), vector);
 }
 
 void Cube::draw()

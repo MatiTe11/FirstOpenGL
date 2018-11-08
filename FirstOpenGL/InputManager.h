@@ -4,6 +4,7 @@
 #include "InputObserver.h"
 #include <vector>
 #include <iostream>
+#include <glm/glm.hpp>
 
 
 
@@ -22,5 +23,7 @@ public:
 	void update();
 	void registerObserver(InputObserver* observer);
 	void removeObserver(InputObserver* observer);
+	glm::vec2 getCursorPos();
+
 };
 

@@ -22,7 +22,7 @@ private:
 	
 
 public:
-	Camera(float sens, glm::vec3 pos, double speed, float screenWidth, float screenHeight);
+	Camera(float sens, glm::vec3 pos, double speed, float screenWidth, float screenHeight, double cursorX, double cursorY);
 	~Camera();
 	void update(double deltaTime);
 	glm::mat4* getViewMatrix();

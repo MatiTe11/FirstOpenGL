@@ -1,19 +1,21 @@
 #include "Camera.h"
 #include <iostream>
 
-Camera::Camera(float sens, glm::vec3 pos, double speed, float screenWidth, float screenHeight)
+Camera::Camera(float sens, glm::vec3 pos, double speed, float screenWidth, float screenHeight, double cursorX, double cursorY)
 {
 	sensitivity = sens;
 	position = pos;
 	this->speed = speed;
-	this->prevX = screenWidth / 2;
-	this->prevY = screenHeight / 2;
+	this->prevX = 0;
+	this->prevY = 0;
 	frontSpeed = 0;
 	rightSpeed = 0;
+	projection = glm::perspective(glm::radians(45.0f), (screenWidth / screenHeight), 0.1f, 200.0f);
+	direction = glm::vec3(0, 0, -1);
+	updateMouse(cursorX, cursorY);
 	yaw = 0;
 	pitch = 0;
-	projection = glm::perspective(glm::radians(45.0f), (screenWidth / screenHeight), 0.1f, 100.0f);
-	direction = glm::vec3(0, 0, 1);
+	updateMouse(cursorX, cursorY);
 }
 
 Camera::~Camera()
@@ -26,6 +28,7 @@ void Camera::update(double deltaTime)
 	position -= (float)frontSpeed * (float)deltaTime * direction;
 	position += glm::normalize(glm::cross(direction, glm::vec3(0,1,0))) * (float)rightSpeed * (float)deltaTime;
 	view = glm::lookAt(position, position + direction, glm::vec3(0.0, 1.0, 0.0));
+	std::cout << pitch<<  "yaw: " << yaw << std::endl;
 }
 
 glm::mat4* Camera::getViewMatrix()
@@ -50,7 +53,7 @@ void Camera::updateMouse(double X, double Y)
 	
 	pitch += deltaY;
 	yaw += deltaX;
-	std::cout << "yaw: " << yaw << " pitch: " << pitch << std::endl;
+	std::cout << "yaw: " << X << " pitch: " << Y << std::endl;
 
 	//update direction vector
 	direction.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));

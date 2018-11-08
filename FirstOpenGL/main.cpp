@@ -40,7 +40,8 @@ int main()
 	glViewport(0, 0, screenWidth, screenHeight);
 
 	InputManager inputManager(window);
-	Camera camera(0.05f, glm::vec3(0,0,3), 20, screenWidth, screenHeight);
+	glm::vec2 cursorPos = inputManager.getCursorPos();
+	Camera camera(0.05f, glm::vec3(0,0,3), 20, screenWidth, screenHeight, cursorPos.x, cursorPos.y);
 	inputManager.registerObserver(&camera);
 
 	ShaderProgram program1("vertexShader.txt", "fragmentShader1.txt");

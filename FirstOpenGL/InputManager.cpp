@@ -63,3 +63,10 @@ void InputManager::removeObserver(InputObserver * observer)
 		observers.erase(iterator);
 	}
 }
+
+glm::vec2 InputManager::getCursorPos()
+{
+	double x, y;
+	glfwGetCursorPos(window, &x, &y);
+	return glm::vec2(x, y);
+}
