@@ -14,15 +14,21 @@ private:
 	static unsigned int EBO;
 	static bool initialized;
 	glm::mat4 model;
+	glm::vec3 translation;
+	glm::vec3 scale;
+	glm::vec3 rotation;
 	static ShaderProgram* cubeShader;
 
 	static void initialize();
+	void transform();
 	
 public:
 	Cube(ShaderProgram* shader);
 	void draw();
 	glm::mat4* getModel();
-	void rotate(float deegres);
+	void rotate(float deegres, glm::vec3 axis);
+	void scaling(glm::vec3 scale);
+	void translate(glm::vec3 trans);
 	~Cube();
 
 	

@@ -61,7 +61,7 @@ int main()
 
 	int width, height, nrChannels;
 	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
-
+	 
 	unsigned int texture;
 	glGenTextures(1, &texture);
 	glActiveTexture(GL_TEXTURE0);
@@ -84,16 +84,11 @@ int main()
 	program2.setSampler2d("ourTexture2", 1);
 
 
-
-	//matricies
-	//glm::mat4 view;
-	// note that we're translating the scene in the reverse direction of where we want to move
-	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	//glm::mat4 projection;
-	
-
 	//Cube
 	Cube myCube(&program2);
+	myCube.scaling(glm::vec3(1.0f));
+	myCube.translate(glm::vec3(0.5f));
+	myCube.rotate(90.0f, glm::vec3(1.0f));
 
 	glEnable(GL_DEPTH_TEST);
 

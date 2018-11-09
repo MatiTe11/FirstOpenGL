@@ -36,24 +36,20 @@ ShaderProgram* Cube::cubeShader = nullptr;
 
 Cube::Cube(ShaderProgram* shader)
 {
-	int scale = 100;
-	for (int i = 0; i < 8; i++)
-	{
-		vertices[5*i] *= scale;
-		vertices[5*i + 1] *= scale;
-		vertices[5*i + 2] *= scale;
-
-	}
 
 	if (!initialized)
 		initialize();
 
+	translation = glm::vec3(0.0f);
+	scale = glm::vec3(1.0f);
+	rotation = glm::vec3(0.0f);
+
 	cubeShader = shader;
 
-	glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
-	//model = glm::rotate(model, glm::radians(45.0f), vector);
-	vector = (glm::inverse(model) * glm::vec4(0, 0, 1, 0));
-	//model = glm::rotate(model, glm::radians(45.0f), vector);
+	//glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
+	////model = glm::rotate(model, glm::radians(45.0f), vector);
+	//vector = (glm::inverse(model) * glm::vec4(0, 0, 1, 0));
+	////model = glm::rotate(model, glm::radians(45.0f), vector);
 }
 
 void Cube::draw()
@@ -68,9 +64,22 @@ glm::mat4* Cube::getModel()
 	return &model;
 }
 
-void Cube::rotate(float deegres)
+void Cube::rotate(float deegres, glm::vec3 axis)
 {
-	model = glm::rotate(model, glm::radians(deegres), glm::vec3(0.0f, 1.0f, 0.0f));	
+	rotation += glm::vec3(axis.x * deegres, axis.y * deegres, axis.z * deegres);
+	transform();
+}
+
+void Cube::scaling(glm::vec3 scale)
+{
+	this->scale *= scale;
+	transform();
+}
+
+void Cube::translate(glm::vec3 trans)
+{
+	translation += trans;
+	transform();
 }
 
 
@@ -96,4 +105,23 @@ void Cube::initialize()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	
+}
+
+void Cube::transform()
+{
+	glm::mat4 trans;
+	trans = glm::translate(trans, translation);
+
+	glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
+	trans = glm::rotate(trans, glm::radians(rotation.x), vector);
+	vector = (glm::inverse(trans) * glm::vec4(0, 1, 0, 0));
+	trans = glm::rotate(trans, glm::radians(rotation.y), vector);
+	vector = (glm::inverse(trans) * glm::vec4(0, 0, 1, 0));
+	trans = glm::rotate(trans, glm::radians(rotation.z), vector);
+
+	trans = glm::scale(trans, scale);
+
+
+
+	model = trans;
 }
