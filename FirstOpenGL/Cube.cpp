@@ -31,12 +31,10 @@ bool Cube::initialized = false;
 unsigned int Cube::VAO = 0;
 unsigned int Cube::VBO = 0;
 unsigned int Cube::EBO = 0;
-ShaderProgram* Cube::cubeShader = nullptr;
 
 
 Cube::Cube(ShaderProgram* shader)
 {
-
 	if (!initialized)
 		initialize();
 
@@ -45,18 +43,24 @@ Cube::Cube(ShaderProgram* shader)
 	rotation = glm::vec3(0.0f);
 
 	cubeShader = shader;
-
-	//glm::vec3 vector = (glm::inverse(model) * glm::vec4(1, 0, 0, 0));
-	////model = glm::rotate(model, glm::radians(45.0f), vector);
-	//vector = (glm::inverse(model) * glm::vec4(0, 0, 1, 0));
-	////model = glm::rotate(model, glm::radians(45.0f), vector);
 }
 
 void Cube::draw()
 {
 	cubeShader->use();
+	cubeShader->setMatrix4f("model", glm::value_ptr(model));
+	for (int i = 0; i < textureVector.size(); i++)
+	{
+		textureVector[i]->bindTextureToUnit(i);
+	}
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	
+}
+
+void Cube::pushTexture(Texture * tex)
+{
+	textureVector.push_back(tex);
 }
 
 glm::mat4* Cube::getModel()
@@ -86,6 +90,7 @@ void Cube::translate(glm::vec3 trans)
 Cube::~Cube()
 {
 }
+
 
 void Cube::initialize()
 {

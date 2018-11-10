@@ -9,6 +9,7 @@
 #include "Cube.h"
 #include "InputManager.h"
 #include "Camera.h"
+#include "Texture.h"
 
 
 
@@ -48,7 +49,6 @@ int main()
 	ShaderProgram program2("vertexShader.txt", "fragmentShader2.txt");
 
 	
-
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -59,36 +59,20 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int width, height, nrChannels;
-	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
-	 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	Texture boxTex("container.jpg", GL_RGB);
+	Texture grassTex("grass.png", GL_RGBA);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	program2.setSampler2d("ourTexture", 0);
-	stbi_image_free(data);
-	///tex2
-	unsigned int texture2;
-	glGenTextures(1, &texture2);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-
-	data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(data);
-	program2.setSampler2d("ourTexture2", 1);
-
-
-	//Cube
+		//Cube
 	Cube myCube(&program2);
+	myCube.pushTexture(&boxTex);
 	myCube.scaling(glm::vec3(1.0f));
 	myCube.translate(glm::vec3(0.5f));
-	myCube.rotate(90.0f, glm::vec3(1.0f));
+	//myCube.rotate(90.0f, glm::vec3(1.0f));
+
+	Cube grassCube(&program2);
+	grassCube.pushTexture(&grassTex);
+	grassCube.scaling(glm::vec3(100.0f, 1.0f, 100.0f));
+	grassCube.translate(glm::vec3(0.0f,-3.0f,0.0f));
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -105,10 +89,11 @@ int main()
 		inputManager.update();
 		camera.update(deltaTime);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		program2.setMatrix4f("model", glm::value_ptr(*myCube.getModel()));
+		
 		program2.setMatrix4f("view", glm::value_ptr(*camera.getViewMatrix()));
 		program2.setMatrix4f("projection", glm::value_ptr(*camera.getProjectionMatrix()));
 		myCube.draw();
+		grassCube.draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

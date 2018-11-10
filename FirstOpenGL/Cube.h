@@ -3,8 +3,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "ShaderProgram.h"
+#include <vector>
+#include "Texture.h"
+#include <glm/gtc/type_ptr.hpp>
 
-class Cube
+class Cube 
 {
 private:
 	static  float vertices[];
@@ -17,7 +20,8 @@ private:
 	glm::vec3 translation;
 	glm::vec3 scale;
 	glm::vec3 rotation;
-	static ShaderProgram* cubeShader;
+	ShaderProgram* cubeShader;
+	std::vector<Texture*> textureVector;
 
 	static void initialize();
 	void transform();
@@ -25,12 +29,12 @@ private:
 public:
 	Cube(ShaderProgram* shader);
 	void draw();
+	void pushTexture(Texture* tex);
 	glm::mat4* getModel();
 	void rotate(float deegres, glm::vec3 axis);
 	void scaling(glm::vec3 scale);
 	void translate(glm::vec3 trans);
 	~Cube();
 
-	
 };
 
