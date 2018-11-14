@@ -27,6 +27,7 @@ public:
 	void update(double deltaTime);
 	glm::mat4* getViewMatrix();
 	glm::mat4* getProjectionMatrix();
+	glm::vec3 getPosition();
 	// Inherited via InputObserver
 	virtual void updateMouse(double X, double Y) override;
 	virtual void updateKey(int key, int action) override;

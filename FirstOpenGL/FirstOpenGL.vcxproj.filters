@@ -82,5 +82,11 @@
     <Text Include="vertexShader.txt">
       <Filter>Shaders</Filter>
     </Text>
+    <Text Include="LampVertexShader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="LampFragmentShader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Lamp.h"
 
 
 
@@ -45,7 +46,7 @@ int main()
 	Camera camera(0.05f, glm::vec3(0,0,3), 20, screenWidth, screenHeight, cursorPos.x, cursorPos.y);
 	inputManager.registerObserver(&camera);
 
-	ShaderProgram program1("vertexShader.txt", "fragmentShader1.txt");
+	ShaderProgram programLamp("LampVertexShader.txt", "LampFragmentShader.txt");
 	ShaderProgram program2("vertexShader.txt", "fragmentShader2.txt");
 
 	
@@ -62,17 +63,23 @@ int main()
 	Texture boxTex("container.jpg", GL_RGB);
 	Texture grassTex("grass.png", GL_RGBA);
 
-		//Cube
+	//Cube
 	Cube myCube(&program2);
 	myCube.pushTexture(&boxTex);
 	myCube.scaling(glm::vec3(1.0f));
-	myCube.translate(glm::vec3(0.5f));
 	//myCube.rotate(90.0f, glm::vec3(1.0f));
-
+	myCube.translate(glm::vec3(0.5f));
+	
+	//Grass
 	Cube grassCube(&program2);
 	grassCube.pushTexture(&grassTex);
 	grassCube.scaling(glm::vec3(100.0f, 1.0f, 100.0f));
 	grassCube.translate(glm::vec3(0.0f,-3.0f,0.0f));
+
+	//Lamp
+	Cube lamp(&programLamp, glm::vec3(1.0f));
+	lamp.translate(glm::vec3(2.0f));
+	lamp.scaling(glm::vec3(0.2f));
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -90,10 +97,18 @@ int main()
 		camera.update(deltaTime);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		programLamp.setMatrix4f("view", glm::value_ptr(*camera.getViewMatrix()));
+		programLamp.setMatrix4f("projection", glm::value_ptr(*camera.getProjectionMatrix()));
 		program2.setMatrix4f("view", glm::value_ptr(*camera.getViewMatrix()));
 		program2.setMatrix4f("projection", glm::value_ptr(*camera.getProjectionMatrix()));
+		program2.set3f("lightPos", lamp.getPos().x, lamp.getPos().y, lamp.getPos().z);
+		program2.set3f("lightColor", 1,1,1);
+		program2.set3f("viewPos", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+		//program2.set3f("objectColor", 1.0f, 0.5f, 0.31f);
+		
 		myCube.draw();
 		grassCube.draw();
+		lamp.draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

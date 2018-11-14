@@ -41,6 +41,11 @@ glm::mat4* Camera::getProjectionMatrix()
 	return &projection;
 }
 
+glm::vec3 Camera::getPosition()
+{
+	return position;
+}
+
 void Camera::updateMouse(double X, double Y)
 {
 	double deltaX = X - prevX;

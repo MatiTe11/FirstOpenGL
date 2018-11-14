@@ -1,36 +1,55 @@
 #include "Cube.h"
 
- float Cube::vertices[] = {
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+float Cube::vertices[] = { //pos, normal, tex
+   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f ,0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f ,0.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f ,1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f ,1.0f,
+   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f ,1.0f,
+   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f ,0.0f,
+
+   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f ,0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 1.0f ,0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 1.0f ,1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 1.0f ,1.0f,
+   -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f ,1.0f,
+   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f ,0.0f,
+
+   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f ,0.0f,
+   -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f ,0.0f,
+   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f ,1.0f,
+   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f ,1.0f,
+   -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f ,1.0f,
+   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f ,0.0f,
+
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f ,0.0f,
+	0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f ,0.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f ,1.0f,
+	0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f ,1.0f,
+	0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f ,1.0f,
+	0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f ,0.0f,
+
+   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f ,0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f ,0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f ,1.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f ,1.0f,
+   -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f ,1.0f,
+   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f ,0.0f,
+
+   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f ,0.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f ,0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f ,1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f ,1.0f,
+   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f ,1.0f,
+   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f
 };
 
-unsigned int Cube::indices[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		0, 2, 3,    // second triangle
-		5,1,3,
-		5,7,3,
-		4,5,7,
-		4,6,7,
-		4,0,2,
-		4,6,2,
-		0,1,5,
-		0,4,5,
-		2,6,7,
-		2,3,7,
 
-};
 
 bool Cube::initialized = false;
 unsigned int Cube::VAO = 0;
 unsigned int Cube::VBO = 0;
-unsigned int Cube::EBO = 0;
+//unsigned int Cube::EBO = 0;
 
 
 Cube::Cube(ShaderProgram* shader)
@@ -45,17 +64,32 @@ Cube::Cube(ShaderProgram* shader)
 	cubeShader = shader;
 }
 
+Cube::Cube(ShaderProgram * shader, glm::vec3 color)
+{
+	if (!initialized)
+		initialize();
+
+	translation = glm::vec3(0.0f);
+	scale = glm::vec3(1.0f);
+	rotation = glm::vec3(0.0f);
+
+	cubeShader = shader;
+	this->color = color;
+}
+
 void Cube::draw()
 {
 	cubeShader->use();
 	cubeShader->setMatrix4f("model", glm::value_ptr(model));
+	cubeShader->set3f("aColor", color.x, color.y, color.z);
+	cubeShader->set1f("ambient", ambient);
 	for (int i = 0; i < textureVector.size(); i++)
 	{
 		textureVector[i]->bindTextureToUnit(i);
 	}
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-	
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);	
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(float));
 }
 
 void Cube::pushTexture(Texture * tex)
@@ -86,6 +120,11 @@ void Cube::translate(glm::vec3 trans)
 	transform();
 }
 
+glm::vec3 Cube::getPos()
+{
+	return translation;
+}
+
 
 Cube::~Cube()
 {
@@ -100,16 +139,16 @@ void Cube::initialize()
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0); //position of vertex
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1); // position of texture
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1); //position of normal
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2); // position of texture
 
-	glGenBuffers(1, &EBO);
+	/*glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
 }
 
 void Cube::transform()
